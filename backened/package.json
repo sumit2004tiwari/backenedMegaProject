@@ -1,0 +1,24 @@
+{
+  "name": "backened",
+  "version": "1.0.0",
+  "description": "a mega project with backened",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon src/index.js"
+  },
+  "keywords": [
+    "html",
+    "css",
+    "js",
+    "react",
+    "mongo",
+    "mongoose",
+    "expressjs"
+  ],
+  "author": "Sumit Tiwari",
+  "license": "ISC",
+  "dependencies": {
+    "nodemon": "^3.1.4"
+  }
+}
