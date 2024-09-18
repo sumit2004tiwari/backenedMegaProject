@@ -1,6 +1,7 @@
 /* eslint-disable import/first */
 import express from "express"
 import cors from "cors"
+import { asyncHandler } from "./utils/asyncHandler.js"
 import cookieParser from "cookie-parser"
 const app = express()
                   
@@ -16,6 +17,5 @@ app.use(cookieParser())
  import router from "./routes/user.router.js"
 
 // routes controller 
- app.use("/users" , router)
-
+ app.use("/users" , asyncHandler(router))
 export default app

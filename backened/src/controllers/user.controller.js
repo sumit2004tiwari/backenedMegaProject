@@ -18,27 +18,28 @@ const registerUser = asyncHandler(async (req, res) => {
   // remove password and refresh token from response
   // check for user response
   // return response or send error
+  
  
-
   const { fullname, email, password, username } = req.body;
 
   if (
     [fullname, email, password, username].some((item) => item.trim() === "")
   ) {
+    console.log("400")
     throw new ApiError(400, "all fields are required");
-  } else if (email.include !== `@`) {
-    throw new ApiError(400, "Enter correct email");
-  }
+  } 
 
-  const existedUser = await User.findOne({
-    $or: [{ username }, { email }],
-  });
-
-  if (existedUser) {
-    throw new ApiError(409, "User Already Exist");
-  }
-  
-  const avtarLocalPath = await res.files?.avatar[0]?.path;
+  // const existedUser = await User.findOne({
+  //   $or: [{ username }, { email }],
+  // });
+console.log("existed user checking")
+  // if (existedUser) {
+  //   console.log("already existed")
+  //   throw new ApiError(409, "User Already Exist");
+  // }
+  console.log("req",req.files?.avatar[0])
+  const avtarLocalPath = await req.files?.avatar[0]?.path;
+  console.log("av",avtarLocalPath)
   const coverImageLocalPath = await  req.files?.coverImage[0]?.path;
 
   if (!avtarLocalPath) {
@@ -73,7 +74,7 @@ console.log('Cover Image Path:', coverImageLocalPath);
       throw new ApiError(500 , "something went wrong while registring user")
     }
      
-    return res.send(201).res.json(
+    return res.status(201).res.json(
       new apiResponse(200 , createdUser , "userRegisteredSuccessfully" , )
     )
 
