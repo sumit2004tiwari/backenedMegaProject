@@ -1,3 +1,4 @@
+/* eslint-disable import/first */
 import express from "express"
 import cors from "cors"
 import cookieParser from "cookie-parser"
@@ -10,4 +11,12 @@ app.use(express.json({limit : "20kb"}))
 app.use(express.urlencoded({extended : true}))
 app.use(express.static("public"))
 app.use(cookieParser())
+
+// routes
+ import router from "./routes/user.router.js"
+
+ 
+// routes controller 
+ app.use("/users" , router)
+
 export default app
