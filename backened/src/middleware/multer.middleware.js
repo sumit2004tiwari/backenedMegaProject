@@ -1,8 +1,9 @@
 import multer from 'multer'
 
 const storage = multer.diskStorage({
+  
     destination: function (req, file, cb) {
-      cb(null, '/05megaProjectOnBackend/backened/public/temp')
+      cb(null, '../../public/temp1')
     },
     filename: function (req, file, cb) {
       const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9)

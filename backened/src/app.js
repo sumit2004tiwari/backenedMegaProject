@@ -15,7 +15,6 @@ app.use(cookieParser())
 // routes
  import router from "./routes/user.router.js"
 
- 
 // routes controller 
  app.use("/users" , router)
 

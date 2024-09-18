@@ -2,8 +2,13 @@ import { asyncHandler } from "../utils/asyncHandler.js";
 import ApiError from "../utils/ApiError.js";
 import { User } from "../models/user.model.js";
 import {uploadOnCloudinary} from "../utils/cloudinary.js"
+import apiResponse from "../utils/apiResponse.js";
+import { upload } from "../middleware/multer.middleware.js";
+
+
 
 const registerUser = asyncHandler(async (req, res) => {
+ 
   // get user detail from frontend
   // validation
   // check if user already exist or not
@@ -13,6 +18,7 @@ const registerUser = asyncHandler(async (req, res) => {
   // remove password and refresh token from response
   // check for user response
   // return response or send error
+ 
 
   const { fullname, email, password, username } = req.body;
 
@@ -24,16 +30,16 @@ const registerUser = asyncHandler(async (req, res) => {
     throw new ApiError(400, "Enter correct email");
   }
 
-  const existedUser = User.findOne({
+  const existedUser = await User.findOne({
     $or: [{ username }, { email }],
   });
 
   if (existedUser) {
     throw new ApiError(409, "User Already Exist");
   }
-
-  const avtarLocalPath = res.files?.avatar[0]?.path;
-  const coverImageLocalPath = req.files?.coverImage[0]?.path;
+  
+  const avtarLocalPath = await res.files?.avatar[0]?.path;
+  const coverImageLocalPath = await  req.files?.coverImage[0]?.path;
 
   if (!avtarLocalPath) {
     throw new ApiError(400, "Upload avtar");
@@ -44,8 +50,12 @@ const registerUser = asyncHandler(async (req, res) => {
     const coverimage = await uploadOnCloudinary(coverImageLocalPath)
     console.log(coverimage)
 
+
+console.log('Avatar Path:', avtarLocalPath);
+console.log('Cover Image Path:', coverImageLocalPath);
+
     if(!avatar){
-      throw new ApiError(400 , "aatar not ploaded")
+      throw new ApiError(400 , "avatar not ploaded")
     }
 
     const user = await User.create({
@@ -58,6 +68,14 @@ const registerUser = asyncHandler(async (req, res) => {
     })
 
     const createdUser = await User.findById(user._id).select("-password -refreshToken")
+
+    if(!createdUser){
+      throw new ApiError(500 , "something went wrong while registring user")
+    }
+     
+    return res.send(201).res.json(
+      new apiResponse(200 , createdUser , "userRegisteredSuccessfully" , )
+    )
 
 });
 
